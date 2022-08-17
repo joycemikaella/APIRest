@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,13 +24,13 @@ public class ContatoService {
 	ContatoRepository repo;
 	
 	public ContatoDTO salvar(Contato contato) {
-		if(contato.getFone().length() != 14) {
+	/*	if(contato.getFone().length() != 14) {
 			throw new ValidacaoException("telefone inválido");
 		}
 		String email = contato.getEmail();
 		if(!email.contains("@")) {
 			throw new ValidacaoException("email inválido");
-		}
+		}*/
 		Contato ct = repo.save(contato);
 		ContatoDTO ctDto = new ContatoDTO(ct);
 		return ctDto;
@@ -45,30 +46,40 @@ public class ContatoService {
 		return contatosDTO;
 	}
 	
-	public ContatoDTO consultarUmContato(Long idContato) {
-		Optional<Contato> opContato = repo.findById(idContato);
-		Contato contato = opContato.orElseThrow(( )-> new EntityNotFoundException("Contato não encontardo"));
-		ContatoDTO ctDTO = new ContatoDTO(contato);
-		return ctDTO;
+	public ContatoDTO consultarUmContato(Long idcontato) {
+		Optional<Contato> opContato = repo.findById(idcontato);
+		Contato contato = opContato.orElseThrow(( )-> new EntityNotFoundException("Contato não encontrado"));
+		return new ContatoDTO(contato);
 	}
 	
-	public void excluirContato (Long idContato){
-		//Contato contato = consultarUmContato(idContato);
-		repo.deleteById(idContato);
-		//repo.delete(contato);
+	public Contato consultarContato(Long idcontato) {
+		Optional<Contato> opContato = repo.findById(idcontato);
+		Contato contato = opContato.orElseThrow(( )-> new EntityNotFoundException("Contato não encontrado"));
+		return contato;
+	}
+	
+	public void excluirContato (Long idcontato){
+		Contato contato = consultarContato(idcontato);
+		//repo.deleteById(idcontato);
+		 repo.delete(contato);
 //		Optional<Contato> opContato = repo.findById(idContato);
 //		Contato contato = opContato.orElseThrow(( )-> new MinhaExcecao("Contato não existe não"));
 //		return contato;
 	}
 	
-	public ContatoDTO alterar(Long idContato, Contato contato) {
-		//Contato ct = consultarUmContato(idContato);
-		Contato ct = repo.findById(idContato).get();
+	public ContatoDTO alterarContato(Long idcontato, Contato contato) {
+		Contato ct = consultarContato(idcontato);
+		BeanUtils.copyProperties(contato, ct, "id");
+		/*Contato ct = repo.findById(idcontato).get();
 		ct.setEmail(contato.getEmail());
 		ct.setNome(contato.getNome());
-		ct.setFone(contato.getFone());
-		ContatoDTO ctDto = new ContatoDTO(repo.save(ct));
-		return ctDto;
+		ct.setFone(contato.getFone());*/
+		
+		return new ContatoDTO(repo.save(ct));
+	}
+	
+	public List<ContatoDTO> consultarContatoPorEmail(String email){
+		return ContatoDTO.converteParaDTO(repo.findByEmail(email));
 	}
 }
 

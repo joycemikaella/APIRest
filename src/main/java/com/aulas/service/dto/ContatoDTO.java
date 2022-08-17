@@ -1,5 +1,8 @@
 package com.aulas.service.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.aulas.entities.Contato;
 
 public class ContatoDTO {
@@ -49,4 +52,13 @@ public class ContatoDTO {
 	public void setFone(String fone) {
 		this.fone = fone;
 	}
+	
+	public static List<ContatoDTO> converteParaDTO(List<Contato> contatos){
+		List<ContatoDTO> contatosDTO = new ArrayList<>();
+		for(Contato ct : contatos) {
+			contatosDTO.add(new ContatoDTO(ct));
+	}
+		return contatosDTO;
+}
+	
 }

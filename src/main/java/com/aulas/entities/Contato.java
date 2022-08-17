@@ -9,18 +9,29 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Entity
 public class Contato {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	@NotBlank(message = "Nome é obrigatório")
 	@Column(length = 50, nullable = false)
 	private String nome;
+	
+	@NotBlank(message = "Email é obrigatório")
+	@Email(message = "Email inválido")
 	@Column(length = 50, nullable = false)
 	private String email;
-	@Column(length = 14)
+	
+	
+	@Size(max = 14, min = 14, message = "O telefone deve ter 14 caracteres")
 	private String fone;
+	
 	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
 	private Instant createdAt;
 	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
