@@ -62,7 +62,7 @@ public class Compromisso {
 
 	public Compromisso(Long id, @NotBlank(message = "O local deve ser informado") String local, Date data,
 			Contato contato) {
-		super();
+		
 		this.id = id;
 		this.local = local;
 		this.data = data;
