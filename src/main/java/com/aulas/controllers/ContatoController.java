@@ -35,6 +35,7 @@ public class ContatoController {
 	public ResponseEntity<List<ContatoDTO>> getContatoPorEmail(@PathVariable("email") String email){
 		return ResponseEntity.ok(service.consultarContatoPorEmail(email));
 	}
+	
 	@GetMapping("/contatos")
 	public ResponseEntity<List<ContatoDTO>> getContatos() {
 		List<ContatoDTO> contatos = service.consultarContatos();
